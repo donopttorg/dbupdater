@@ -19,7 +19,7 @@ var (
 	myLog *logrus.Logger
 )
 
-func Start() {
+func StartUpdater() {
 	var err error
 
 	countInStockUpdateDelay, err = strconv.Atoi(os.Getenv("countInStockUpdateDelay"))
