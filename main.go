@@ -1,4 +1,4 @@
-package donopttorg_dbupdater
+package main
 
 func main() {
 	StartUpdater()
