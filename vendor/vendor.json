@@ -3,10 +3,100 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "38FttO7qZ8dBOLg2aPv/hYaCif0=",
+			"path": "github.com/go-pg/pg",
+			"revision": "37768fbfd11bd5bee20e26fffe605b791b9193d7",
+			"revisionTime": "2019-06-16T08:27:06Z"
+		},
+		{
+			"checksumSHA1": "tODavCEjwJB8F6bjr7BpSRvzOS8=",
+			"path": "github.com/go-pg/pg/internal",
+			"revision": "37768fbfd11bd5bee20e26fffe605b791b9193d7",
+			"revisionTime": "2019-06-16T08:27:06Z"
+		},
+		{
+			"checksumSHA1": "tulv3FT/H6y0uyrhNnd92W3ofgE=",
+			"path": "github.com/go-pg/pg/internal/iszero",
+			"revision": "37768fbfd11bd5bee20e26fffe605b791b9193d7",
+			"revisionTime": "2019-06-16T08:27:06Z"
+		},
+		{
+			"checksumSHA1": "eujSiRZ/YuBE4iBDMYU9QwJwXWs=",
+			"path": "github.com/go-pg/pg/internal/parser",
+			"revision": "37768fbfd11bd5bee20e26fffe605b791b9193d7",
+			"revisionTime": "2019-06-16T08:27:06Z"
+		},
+		{
+			"checksumSHA1": "8ssG0TszAtoHcRrxRF1K08H7giM=",
+			"path": "github.com/go-pg/pg/internal/pool",
+			"revision": "37768fbfd11bd5bee20e26fffe605b791b9193d7",
+			"revisionTime": "2019-06-16T08:27:06Z"
+		},
+		{
+			"checksumSHA1": "X7vVexmYs4T765MgiMnb6up8aPQ=",
+			"path": "github.com/go-pg/pg/internal/structfilter",
+			"revision": "37768fbfd11bd5bee20e26fffe605b791b9193d7",
+			"revisionTime": "2019-06-16T08:27:06Z"
+		},
+		{
+			"checksumSHA1": "LPyGMq5Qo/FqzP6I+ena6AkJm6U=",
+			"path": "github.com/go-pg/pg/internal/tag",
+			"revision": "37768fbfd11bd5bee20e26fffe605b791b9193d7",
+			"revisionTime": "2019-06-16T08:27:06Z"
+		},
+		{
+			"checksumSHA1": "bnSFqFJhtk5tkMsqtqoO3aTZBQs=",
+			"path": "github.com/go-pg/pg/orm",
+			"revision": "37768fbfd11bd5bee20e26fffe605b791b9193d7",
+			"revisionTime": "2019-06-16T08:27:06Z"
+		},
+		{
+			"checksumSHA1": "HLre8C1KeFPDT0xA45ohBX/Z8B8=",
+			"path": "github.com/go-pg/pg/types",
+			"revision": "37768fbfd11bd5bee20e26fffe605b791b9193d7",
+			"revisionTime": "2019-06-16T08:27:06Z"
+		},
+		{
+			"checksumSHA1": "Hf2EdZUOQfrn+iW34gg2/0GHo94=",
+			"path": "github.com/jinzhu/inflection",
+			"revision": "f5c5f50e6090ae76a29240b61ae2a90dd810112e",
+			"revisionTime": "2019-06-03T04:28:36Z"
+		},
+		{
 			"checksumSHA1": "HSjmfBTEuQKjwS8Xni9mcdsjyDg=",
 			"path": "github.com/juju/errors",
 			"revision": "e65537c515d77e35697c471d6c2755375cb3adc4",
 			"revisionTime": "2019-02-07T03:37:35Z"
+		},
+		{
+			"checksumSHA1": "Z7rkupTQRAZzzTCqDLiSbNR70to=",
+			"path": "github.com/konsorten/go-windows-terminal-sequences",
+			"revision": "f55edac94c9bbba5d6182a4be46d86a2c9b5b50e",
+			"revisionTime": "2019-02-26T22:47:05Z"
+		},
+		{
+			"checksumSHA1": "HzxFttPpY3cChjc5Jdy5NrAlncA=",
+			"path": "github.com/sirupsen/logrus",
+			"revision": "2a22dbedbad1fd454910cd1f44f210ef90c28464",
+			"revisionTime": "2019-05-18T13:52:02Z"
+		},
+		{
+			"checksumSHA1": "1MGpGDQqnUoRpv7VEcQrXOBydXE=",
+			"path": "golang.org/x/crypto/pbkdf2",
+			"revision": "5c40567a22f818bd14a1ea7245dad9f8ef0691aa",
+			"revisionTime": "2019-06-11T18:31:17Z"
+		},
+		{
+			"checksumSHA1": "u9gnVrmEBg1JVwXddPoN3j8WTyo=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "b47fdc937951267e2d980171881317deea47f29b",
+			"revisionTime": "2019-06-14T14:08:57Z"
+		},
+		{
+			"checksumSHA1": "ZKNPrWi7bL2skaBodRe+kZG8E9k=",
+			"path": "mellium.im/sasl",
+			"revision": "2a61779921b6e437e546b15bd4d92331e593ff75",
+			"revisionTime": "2019-03-25T16:33:52Z"
 		}
 	],
 	"rootPath": "github.com/NekitMalyarenko/donopttorg-dbupdater"
