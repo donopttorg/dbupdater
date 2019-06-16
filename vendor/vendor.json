@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "HSjmfBTEuQKjwS8Xni9mcdsjyDg=",
+			"path": "github.com/juju/errors",
+			"revision": "e65537c515d77e35697c471d6c2755375cb3adc4",
+			"revisionTime": "2019-02-07T03:37:35Z"
+		}
+	],
+	"rootPath": "github.com/NekitMalyarenko/donopttorg-dbupdater"
+}
