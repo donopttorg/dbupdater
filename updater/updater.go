@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	counter = 2
+	counter = 0
 
 	countInStockUpdateDelay = 0
 	totalProductsUpdateDelay = 0
