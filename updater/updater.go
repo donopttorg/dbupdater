@@ -86,14 +86,6 @@ func onlyCountInStockUpdate() {
 		for i :=0; i < len(pr); i++ {
 			parsedProduct := pr[i]
 
-			 if parsedProduct.Id == dbProduct.Id && parsedProduct.CountInStock == -1  {
-				 myLog.WithFields(logrus.Fields{
-					 "name": parsedProduct.FullName,
-					 "count in stock": parsedProduct.CountInStock,
-					 "db count in stock": dbProduct.CountInStock,
-				 }).Info("test")
-			 }
-
 			if parsedProduct.Id == dbProduct.Id && parsedProduct.CountInStock == dbProduct.CountInStock {
 				pr = pr[:i+copy(pr[i:], pr[i+1:])]
 				break
