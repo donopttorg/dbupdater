@@ -4,6 +4,7 @@ import (
 	"github.com/juju/errors"
 	"encoding/json"
 	"strings"
+	"math"
 )
 
 func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, error) {
@@ -35,6 +36,7 @@ func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, 
 				//log.Println(i, len(parsed))
 				parsed = parsed[:i+copy(parsed[i:], parsed[i+1:])]
 			} else {
+				parsed[i].CountInStock = math.Round(parsed[i].CountInStock * 1000) / 1000
 				i++
 			}
 		}
