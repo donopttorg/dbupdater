@@ -31,8 +31,7 @@ func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, 
 				val.HasImage = hasImage(val.Id)
 			}
 
-			if len(strings.Replace(val.Colour, " ", "", -1)) == 0 ||
-				len(strings.Replace(val.Model, " ", "", -1)) == 0 {
+			if len(strings.Replace(val.Model, " ", "", -1)) == 0 {
 				//log.Println(i, len(parsed))
 				parsed = parsed[:i+copy(parsed[i:], parsed[i+1:])]
 			} else {

@@ -1,6 +1,6 @@
 package updater
 
-import "encoding/json"
+import "time"
 
 type ProductWrapper struct {
 	Id            int                      `json:"id"       sql:"id, pk"`
@@ -9,42 +9,18 @@ type ProductWrapper struct {
 	Children      []string                 `json:"-"        sql:"children, array"`
 	CategoryId    string                   `json:"-"        sql:"category_id"`
 	SubCategoryId string                   `json:"-"        sql:"sub_category_id"`
+	LastUpdate    time.Time                `json:"-"        sql:"last_update"`
 }
 
 type Product struct {
-	Id             string  `json:"Id"             sql:"id, pk"`
-	FullName       string  `json:"Name"           sql:"full_name"`
-	Model          string  `json:"Model"          sql:"-"`
-	Group          string  `json:"Group"          sql:"-"`
-	SubGroup       string  `json:"SubGroup"       sql:"-"`
-	Size           string  `json:"Size"           sql:"size"`
-	Colour         string  `json:"Colour"         sql:"colour"`
-	CountInStock   float64 `json:"CountInStock"   sql:"count_in_stock"`
-	PriceRetail    float64 `json:"PriceRetail"    sql:"price_retail"`
-	PriceWholesale float64 `json:"PriceWholesale" sql:"price_wholesale"`
-	HasImage       bool    `json:"-"              sql:"has_image"`
-}
-
-func (product Product) MarshalJSON() ([]byte, error) {
-	m := map[string]interface{}{
-		"id": product.Id,
-		"fullName": product.FullName,
-		"size": product.Size,
-		"color": product.Colour,
-		"priceRetail": product.PriceRetail,
-		"priceWholesale": product.PriceWholesale,
-	}
-
-	if product.HasImage {
-		m["hasImage"] = true
-	}
-
-	if product.CountInStock > 5 {
-		m["isCountInStockTooBig"] = true
-		m["countInStock"] = 5
-	} else {
-		m["countInStock"] = product.CountInStock
-	}
-
-	return json.Marshal(m)
+	Id             string    `json:"Id"             sql:"id, pk"`
+	FullName       string    `json:"Name"           sql:"full_name"`
+	Model          string    `json:"Model"          sql:"-"`
+	Group          string    `json:"Group"          sql:"-"`
+	SubGroup       string    `json:"SubGroup"       sql:"-"`
+	Size           string    `json:"Size"           sql:"size"`
+	Colour         string    `json:"Colour"         sql:"colour"`
+	CountInStock   float64   `json:"CountInStock"   sql:"count_in_stock"`
+	HasImage       bool      `json:"-"              sql:"has_image"`
+	LastUpdate     time.Time `json:"-"              sql:"last_update"`
 }

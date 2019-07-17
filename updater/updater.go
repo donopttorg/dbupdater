@@ -140,6 +140,8 @@ func totalProductsUpdate() {
 	}
 
 	for _, product := range pr {
+		product.LastUpdate = t
+
 		exists, err := db.Model(&Product{}).Where("id = ?", product.Id).Exists()
 		if err != nil {
 			myLog.Error(errors.Details(errors.Trace(err)))
@@ -170,6 +172,8 @@ func totalProductsUpdate() {
 	}).Info("products were successfully inserted")
 
 	for _, wrapper := range pw {
+		wrapper.LastUpdate = t
+
 		exists, err := db.Model(&ProductWrapper{}).Where("name = ?", wrapper.Name).Exists()
 		if err != nil {
 			myLog.Error(errors.Details(errors.Trace(err)))
@@ -184,6 +188,7 @@ func totalProductsUpdate() {
 		if exists {
 			_, err = db.Model(wrapper).
 				Column("options").Column("children").
+				Column("last_update").
 				Where("name = ?", wrapper.Name).Update()
 		} else {
 			err = db.Insert(wrapper)
@@ -195,7 +200,26 @@ func totalProductsUpdate() {
 		}
 	}
 
+	totalDeleted := 0
+
+	res, err := db.Exec("delete from products where last_update < ? or last_update is null", t)
+	if err != nil {
+		myLog.Error(errors.Details(errors.Trace(err)))
+		return
+	}
+
+	totalDeleted += res.RowsAffected()
+
+	res, err = db.Exec("delete from product_wrappers where last_update < ? or last_update is null", t)
+	if err != nil {
+		myLog.Error(errors.Details(errors.Trace(err)))
+		return
+	}
+
+	totalDeleted += res.RowsAffected()
+
 	myLog.WithFields(logrus.Fields{
 		"s": time.Now().Sub(t).Seconds(),
+		"deleted": totalDeleted,
 	}).Info("total products update was successfully finished")
 }
