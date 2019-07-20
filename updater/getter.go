@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"strings"
 	"math"
+	"time"
 )
 
 func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, error) {
@@ -46,7 +47,14 @@ func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, 
 		return nil, nil, errors.Trace(err)
 	}
 
-	//log.Println("rawData:", len(rawData))
+	if checkImages {
+		for _, v := range rawData {
+			if !v.HasImage {
+				v.HasImage = hasImage(v.Id)
+				time.Sleep(100 * time.Millisecond)
+			}
+		}
+	}
 
 	//processing all data
 	rawRes := func(rawData []*Product) map[string]*ProductWrapper {
