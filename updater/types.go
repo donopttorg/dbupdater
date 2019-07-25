@@ -13,14 +13,15 @@ type ProductWrapper struct {
 }
 
 type Product struct {
-	Id             string    `json:"Id"             sql:"id, pk"`
-	FullName       string    `json:"Name"           sql:"full_name"`
-	Model          string    `json:"Model"          sql:"-"`
-	Group          string    `json:"Group"          sql:"-"`
-	SubGroup       string    `json:"SubGroup"       sql:"-"`
-	Size           string    `json:"Size"           sql:"size"`
-	Colour         string    `json:"Colour"         sql:"colour"`
-	CountInStock   float64   `json:"CountInStock"   sql:"count_in_stock"`
-	HasImage       bool      `json:"-"              sql:"has_image"`
-	LastUpdate     time.Time `json:"-"              sql:"last_update"`
+	Id             string    `json:"Id"                      sql:"id, pk"`
+	FullName       string    `json:"Name"                    sql:"full_name"`
+	Model          string    `json:"Model"                   sql:"-"`
+	Group          string    `json:"Group"                   sql:"-"`
+	SubGroup       string    `json:"SubGroup"                sql:"-"`
+	Size           string    `json:"Size"                    sql:"size"`
+	Colour         string    `json:"Colour"                  sql:"colour"`
+	CountInStock   float64   `json:"CountInStock"            sql:"count_in_stock"`
+	HasImage       bool      `json:"-"                       sql:"has_image"`
+	TechSpec       string    `json:"TechnicalSpecifications" sql:"tech_spec"`
+	LastUpdate     time.Time `json:"-"                       sql:"last_update"`
 }
