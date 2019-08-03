@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/NekitMalyarenko/donopttorg-dbupdater/updater"
+	"github.com/donopttorg/dbupdater/updater"
 	"os"
 	"io/ioutil"
 	"encoding/json"
