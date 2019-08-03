@@ -1,1 +1,1 @@
-worker: bin/donopttorg-dbupdater
+worker: bin/donopttorg-dbupdater-final
