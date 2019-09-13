@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/donopttorg/dbupdater/updater"
 	"os"
 	"io/ioutil"
 	"encoding/json"
 	"log"
+	"github.com/donopttorg/dbupdater/updater"
 )
 
 const envConfigFile = "env.json"

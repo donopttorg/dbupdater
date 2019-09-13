@@ -10,10 +10,7 @@ import (
 )
 
 var (
-	counter = 0
-
 	countInStockUpdateDelay = 0
-	totalProductsUpdateDelay = 0
 
 	db  *pg.DB
 	myLog *logrus.Logger
@@ -27,7 +24,7 @@ func StartUpdater() {
 		panic(err)
 	}
 
-	totalProductsUpdateDelay, err = strconv.Atoi(os.Getenv("totalProductsUpdateDelay"))
+	fullTimeUpdate, err := time.Parse("15:04", os.Getenv("fullTimeUpdate"))
 	if err != nil {
 		panic(err)
 	}
@@ -47,12 +44,10 @@ func StartUpdater() {
 
 
 	for {
-		if counter == totalProductsUpdateDelay {
-			counter = 0
+		if fullTimeUpdate.Hour() == time.Now().Hour() && fullTimeUpdate.Minute() == time.Now().Minute()  {
 			totalProductsUpdate()
-			time.Sleep(time.Duration(countInStockUpdateDelay) * time.Second)
+			time.Sleep(time.Minute)
 		} else {
-			counter++
 			onlyCountInStockUpdate()
 			time.Sleep(time.Duration(countInStockUpdateDelay) * time.Second)
 		}
