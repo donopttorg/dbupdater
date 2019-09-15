@@ -145,6 +145,9 @@ func totalProductsUpdate() {
 
 		if exists {
 			_, err = tx.Model(product).
+				Column("full_name").Column("size").
+				Column("colour").Column("count_in_stock").
+				Column("tech_spec").Column("last_update").
 				Where("id = ?", product.Id).Update()
 		} else {
 			err = tx.Insert(product)
