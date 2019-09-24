@@ -58,6 +58,6 @@ func SendPostWithUrlParams(apiURL string, params map[string]string) ([]byte, int
 
 
 func SendProtectedPostWithUrlParams(apiURL string, params map[string]string) ([]byte, int, error) {
-	params["JToken"] = os.Getenv("JToken")
+	params["jToken"] = os.Getenv("JToken")
 	return SendPostWithUrlParams(apiURL, params)
 }
