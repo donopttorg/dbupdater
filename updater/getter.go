@@ -6,7 +6,9 @@ import (
 	"strings"
 	"math"
 	"time"
+	"log"
 )
+
 
 func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, error) {
 	// downloading data from server
@@ -48,11 +50,21 @@ func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, 
 	}
 
 	if checkImages {
-		for _, v := range rawData {
-			if !v.HasImage {
-				v.HasImage = hasImage(v.Id)
-				time.Sleep(100 * time.Millisecond)
+		for i := 0; i < 3; i++ {
+			temp := make([]string, 0)
+			time.Sleep(5000 * time.Millisecond)
+
+			for _, v := range rawData {
+				if !v.HasImage {
+					v.HasImage = hasImage(v.Id)
+					if v.HasImage {
+						temp = append(temp, v.Id)
+						time.Sleep(150 * time.Millisecond)
+					}
+				}
 			}
+
+			log.Println("double checked images worked out for", len(temp), "i=", i)
 		}
 	}
 
