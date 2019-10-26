@@ -1,12 +1,12 @@
 package updater
 
 import (
-	"os"
-	"strconv"
 	"github.com/go-pg/pg"
-	"time"
 	"github.com/juju/errors"
 	"github.com/sirupsen/logrus"
+	"os"
+	"strconv"
+	"time"
 )
 
 var (
@@ -29,11 +29,12 @@ func StartUpdater() {
 		panic(err)
 	}
 
-	db = pg.Connect(&pg.Options{
-		User: os.Getenv("DB_USER"),
-		Password: os.Getenv("DB_PASSWORD"),
-		Addr: os.Getenv("DB_ADDRESS"),
-	})
+	url, err := pg.ParseURL(os.Getenv("DB_URL"))
+	if err != nil {
+		panic(err)
+	}
+
+	db = pg.Connect(url)
 
 	myLog = logrus.New()
 	myLog.SetFormatter(&logrus.TextFormatter{
