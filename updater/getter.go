@@ -1,16 +1,14 @@
 package updater
 
 import (
-	"github.com/juju/errors"
 	"encoding/json"
-	"strings"
+	"github.com/juju/errors"
 	"math"
-	"time"
-	"log"
+	"strings"
 )
 
 
-func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, error) {
+func getAllProductsFromServer() ([]*ProductWrapper, []*Product, error) {
 	// downloading data from server
 	rawData, err := func() ([]*Product, error) {
 		raw, _, err := SendProtectedPostWithUrlParams("/GoodsChangeStokForSale", map[string]string{
@@ -30,9 +28,6 @@ func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, 
 
 		for i := 0; i < len(parsed); {
 			val := parsed[i]
-			if checkImages {
-				val.HasImage = hasImage(val.Id)
-			}
 
 			if len(strings.Replace(val.Model, " ", "", -1)) == 0 {
 				//log.Println(i, len(parsed))
@@ -49,22 +44,30 @@ func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, 
 		return nil, nil, errors.Trace(err)
 	}
 
-	if checkImages {
-		for i := 0; i < 3; i++ {
-			temp := make([]string, 0)
-			time.Sleep(5000 * time.Millisecond)
+	//updating CountInStocks
+	raw, _, err := SendProtectedPostWithUrlParams("/BalancesForCustomerTwoWarehouses", map[string]string{})
+	if err != nil {
+		return nil, nil, errors.Trace(err)
+	}
 
-			for _, v := range rawData {
-				if !v.HasImage {
-					v.HasImage = hasImage(v.Id)
-					if v.HasImage {
-						temp = append(temp, v.Id)
-						time.Sleep(150 * time.Millisecond)
-					}
+	apiProductWithQuantities := make(map[string]interface{})
+	err = json.Unmarshal(raw, &apiProductWithQuantities)
+	if err != nil {
+		return nil, nil, errors.Trace(err)
+	}
+
+	products := apiProductWithQuantities["listOfGoodsForDisclosures"].([]interface{})
+	for _, productWithQuantities := range products {
+		parsedProductWithQuantities := productWithQuantities.(map[string]interface{})
+
+		for _, product := range rawData {
+			if product.Id == parsedProductWithQuantities["Id"] {
+				convertedMap := map[string]float64{}
+				for k, v := range  parsedProductWithQuantities["Quantities"].(map[string]interface{}) {
+					convertedMap[k] = v.(float64)
 				}
+				product.CountInStocks = convertedMap
 			}
-
-			log.Println("double checked images worked out for", len(temp), "i=", i)
 		}
 	}
 
