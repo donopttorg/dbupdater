@@ -20,9 +20,7 @@ type Product struct {
 	SubGroup        string             `json:"SubGroup"                sql:"-"`
 	Size            string             `json:"Size"                    sql:"size"`
 	Colour          string             `json:"Colour"                  sql:"colour"`
-	CountInStock    float64            `json:"CountInStock"            sql:"count_in_stock"`
 	CountInStocks   map[string]float64 `json:"-"                       sql:"count_in_stocks"`
-	HasImage        bool               `json:"-"                       sql:"has_image"`
 	TechSpec        string             `json:"TechnicalSpecifications" sql:"tech_spec"`
 	LastUpdate      time.Time          `json:"-"                       sql:"last_update"`
 }

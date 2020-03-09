@@ -5,6 +5,7 @@ import (
 	"github.com/juju/errors"
 	"github.com/sirupsen/logrus"
 	"os"
+	"reflect"
 	"strconv"
 	"time"
 )
@@ -61,7 +62,7 @@ func onlyCountInStockUpdate() {
 	myLog.Info("only products in stock update begin")
 	t := time.Now()
 
-	_, pr, err := getAllProductsFromServer(false)
+	pr, err := getCountInStocksFromServer()
 	if err != nil {
 		myLog.Error(errors.Details(errors.Trace(err)))
 		return
@@ -82,18 +83,11 @@ func onlyCountInStockUpdate() {
 		for i :=0; i < len(pr); i++ {
 			parsedProduct := pr[i]
 
-			if parsedProduct.Id == dbProduct.Id && parsedProduct.CountInStock == dbProduct.CountInStock {
+			if parsedProduct.Id == dbProduct.Id && reflect.DeepEqual(parsedProduct.CountInStocks, dbProduct.CountInStocks) {
 				pr = pr[:i+copy(pr[i:], pr[i+1:])]
 				break
 			}
 		}
-	}
-
-	for _, product := range pr {
-		myLog.WithFields(logrus.Fields{
-			"name": product.FullName,
-			"count in stock": product.CountInStock,
-		}).Info("new")
 	}
 
 	myLog.WithFields(logrus.Fields{
@@ -102,7 +96,12 @@ func onlyCountInStockUpdate() {
 	}).Info("products were successfully compared")
 
 	for _, product := range pr {
-		_, err = db.Model(product).Where("id = ?", product.Id).Column("count_in_stock").Update()
+		myLog.WithFields(logrus.Fields{
+			"name": product.FullName,
+			"count in stocks": product.CountInStocks,
+		}).Info("new")
+
+		_, err = db.Model(product).Where("id = ?", product.Id).Column("count_in_stocks").Update()
 		if err != nil {
 			myLog.Error(errors.Details(errors.Trace(err)))
 			return
@@ -119,7 +118,7 @@ func totalProductsUpdate() {
 	myLog.Info("total products update begin")
 	t := time.Now()
 
-	pw, pr, err := getAllProductsFromServer(true)
+	pw, pr, err := getAllProductsFromServer()
 	if err != nil {
 		myLog.Error(errors.Details(errors.Trace(err)))
 		return
@@ -147,9 +146,8 @@ func totalProductsUpdate() {
 		if exists {
 			_, err = tx.Model(product).
 				Column("full_name").Column("size").
-				Column("colour").Column("count_in_stock").
-				Column("tech_spec").Column("last_update").
-				Column("has_image").
+				Column("colour").Column("tech_spec").
+				Column("last_update").
 				Where("id = ?", product.Id).Update()
 		} else {
 			err = tx.Insert(product)
@@ -202,7 +200,7 @@ func totalProductsUpdate() {
 
 	totalDeleted := 0
 
-	res, err := db.Exec("delete from products where last_update < ? or last_update is null", t)
+	/*res, err := db.Exec("delete from products where last_update < ? or last_update is null", t)
 	if err != nil {
 		myLog.Error(errors.Details(errors.Trace(err)))
 		return
@@ -216,7 +214,7 @@ func totalProductsUpdate() {
 		return
 	}
 
-	totalDeleted += res.RowsAffected()
+	totalDeleted += res.RowsAffected()*/
 
 	myLog.WithFields(logrus.Fields{
 		"s": time.Now().Sub(t).Seconds(),

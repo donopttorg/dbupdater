@@ -1,16 +1,13 @@
 package updater
 
 import (
-	"github.com/juju/errors"
 	"encoding/json"
+	"github.com/juju/errors"
 	"strings"
-	"math"
-	"time"
-	"log"
 )
 
 
-func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, error) {
+func getAllProductsFromServer() ([]*ProductWrapper, []*Product, error) {
 	// downloading data from server
 	rawData, err := func() ([]*Product, error) {
 		raw, _, err := SendProtectedPostWithUrlParams("/GoodsChangeStokForSale", map[string]string{
@@ -30,15 +27,11 @@ func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, 
 
 		for i := 0; i < len(parsed); {
 			val := parsed[i]
-			if checkImages {
-				val.HasImage = hasImage(val.Id)
-			}
 
 			if len(strings.Replace(val.Model, " ", "", -1)) == 0 {
 				//log.Println(i, len(parsed))
 				parsed = parsed[:i+copy(parsed[i:], parsed[i+1:])]
 			} else {
-				parsed[i].CountInStock = math.Round(parsed[i].CountInStock * 1000) / 1000
 				i++
 			}
 		}
@@ -47,25 +40,6 @@ func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, 
 	}()
 	if err != nil {
 		return nil, nil, errors.Trace(err)
-	}
-
-	if checkImages {
-		for i := 0; i < 3; i++ {
-			temp := make([]string, 0)
-			time.Sleep(5000 * time.Millisecond)
-
-			for _, v := range rawData {
-				if !v.HasImage {
-					v.HasImage = hasImage(v.Id)
-					if v.HasImage {
-						temp = append(temp, v.Id)
-						time.Sleep(150 * time.Millisecond)
-					}
-				}
-			}
-
-			log.Println("double checked images worked out for", len(temp), "i=", i)
-		}
 	}
 
 	//processing all data
@@ -167,11 +141,64 @@ func getAllProductsFromServer(checkImages bool) ([]*ProductWrapper, []*Product, 
 	return res, rawData, nil
 }
 
+func getCountInStocksFromServer() ([]*Product, error) {
+	products, err := func() ([]*Product, error) {
+		raw, _, err := SendProtectedPostWithUrlParams("/GoodsChangeStokForSale", map[string]string{
+			"LastVersionStock": "0",
+			"LastVersionPrice": "0",
+			"LastVersionGoods": "0",
+		})
+		if err != nil {
+			return nil, errors.Trace(err)
+		}
 
-func hasImage(id string) bool {
-	_, status, err :=  SendProtectedPostWithUrlParams("/GetImageViewGoods", map[string]string {
-		"IdGoods": id,
-	})
+		parsed := make([]*Product, 0)
+		err = json.Unmarshal(raw, &parsed)
+		if err != nil {
+			return nil, errors.Trace(err)
+		}
 
-	return err == nil && status == 200
+		for i := 0; i < len(parsed); {
+			val := parsed[i]
+
+			if len(strings.Replace(val.Model, " ", "", -1)) == 0 {
+				//log.Println(i, len(parsed))
+				parsed = parsed[:i+copy(parsed[i:], parsed[i+1:])]
+			} else {
+				i++
+			}
+		}
+
+		return parsed, nil
+	}()
+	if err != nil {
+		return  nil, errors.Trace(err)
+	}
+
+	rawCountInStocks, _, err := SendProtectedPostWithUrlParams("/BalancesForCustomerTwoWarehouses", map[string]string{})
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+
+	countInStocksResp := make(map[string]interface{})
+	err = json.Unmarshal(rawCountInStocks, &countInStocksResp)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+
+	countInStocksData := countInStocksResp["listOfGoodsForDisclosures"].([]interface{})
+	for _, product := range products {
+		for _, data := range countInStocksData {
+			parsedData := data.(map[string]interface{})
+			if parsedData["Id"].(string) == product.Id {
+				parsedCountInStocks := make(map[string]float64)
+				for key, val := range parsedData["Quantities"].(map[string]interface{}) {
+					parsedCountInStocks[key] = val.(float64)
+				}
+				product.CountInStocks = parsedCountInStocks
+			}
+		}
+	}
+
+	return products, nil
 }
