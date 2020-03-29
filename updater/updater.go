@@ -200,7 +200,7 @@ func totalProductsUpdate() {
 
 	totalDeleted := 0
 
-	/*res, err := db.Exec("delete from products where last_update < ? or last_update is null", t)
+	res, err := db.Exec("delete from products where last_update < ? or last_update is null", t)
 	if err != nil {
 		myLog.Error(errors.Details(errors.Trace(err)))
 		return
@@ -214,7 +214,7 @@ func totalProductsUpdate() {
 		return
 	}
 
-	totalDeleted += res.RowsAffected()*/
+	totalDeleted += res.RowsAffected()
 
 	myLog.WithFields(logrus.Fields{
 		"s": time.Now().Sub(t).Seconds(),
