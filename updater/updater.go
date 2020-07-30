@@ -186,7 +186,8 @@ func totalProductsUpdate() {
 		if exists {
 			_, err = db.Model(wrapper).
 				Column("options").Column("children").
-				Column("last_update").
+				Column("last_update").Column("category_id").
+				Column("sub_category_id").
 				Where("name = ?", wrapper.Name).Update()
 		} else {
 			err = db.Insert(wrapper)
