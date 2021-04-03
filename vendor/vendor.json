@@ -94,7 +94,7 @@
 		},
 		{
 			"checksumSHA1": "ZKNPrWi7bL2skaBodRe+kZG8E9k=",
-			"path": "mellium.im/sasl",
+			"path": "github.com/mellium/sasl",
 			"revision": "2a61779921b6e437e546b15bd4d92331e593ff75",
 			"revisionTime": "2019-03-25T16:33:52Z"
 		}
