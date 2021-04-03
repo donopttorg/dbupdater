@@ -3,6 +3,7 @@ package updater
 import (
 	"encoding/json"
 	"github.com/juju/errors"
+	"math"
 	"strings"
 )
 
@@ -33,6 +34,13 @@ func getAllProductsFromServer() ([]*ProductWrapper, []*Product, error) {
 				parsed = parsed[:i+copy(parsed[i:], parsed[i+1:])]
 			} else {
 				i++
+			}
+		}
+
+		// rounding count in stocks
+		for _, item := range parsed {
+			for key, countInStock := range item.CountInStocks {
+				item.CountInStocks[key] = math.Ceil(countInStock*100) / 100
 			}
 		}
 
